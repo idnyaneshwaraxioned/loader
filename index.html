@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Loader</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      body {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #000;
+        overflow: hidden;
+      }
+      .outer {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        position: relative;
+        background-color: #fff;
+      }
+      .outer::after {
+        content: '';
+        width: 197px;
+        height: 197px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background-color: #000;
+      }
+      .inner {
+        border-radius: 50%;
+        position: absolute;
+        z-index: 10;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        /* background-color: red;
+        border: 2px solid green; */
+      }
+      .inner span,
+      .inner a {
+        font-size: 30px;
+        color: #fff;
+        text-align: center;
+        display: inline-block;
+        position: absolute;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .inner a {
+        text-decoration: none;
+        font-weight: bold;
+        display: none;
+      }
+      .inner span.inactive {
+        display: none;
+      }
+      .inner a.active {
+        display: inline-block;
+      }
+
+      .loader {
+        width: 250px;
+        height: 250px;
+        transform: rotate(-90deg);
+        stroke-linecap: round;
+        stroke-width: 0.5;
+        fill: none;
+        position: absolute;
+        z-index: 5;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-90deg);
+        display: block;
+      }
+      .external-circle {
+        stroke: #212121;
+        stroke-dashoffset: 0;
+        transform: rotate(0deg);
+        transform-origin: top;
+      }
+
+      .external-circle {
+        stroke-dasharray: 312;
+        /* animation: external 1s linear infinite; */
+        opacity: 0.9;
+      }
+
+      @keyframes external {
+        0% {
+          stroke-dashoffset: 312;
+        }
+        100% {
+          stroke-dashoffset: -312;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="outer active">
+      <div class="inner">
+        <span>0%</span>
+        <a href="https://www.google.com/" title="Google">Begins</a>
+      </div>
+      <svg
+        class="loader"
+        viewBox="0 0 120 120"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle class="external-circle" cx="60" cy="60" r="47.6"></circle>
+      </svg>
+    </div>
+    <script>
+      let outer = document.querySelector('.outer');
+      let inner = document.querySelector('.inner');
+      let percent = document.querySelector('.inner span');
+      let anchor = document.querySelector('.inner a');
+      let externalCircle = document.querySelector('.external-circle');
+
+      let count = 0;
+
+      window.addEventListener('load', () => {
+        let loading = setInterval(() => {
+          if (count == 100) {
+            outer.classList.remove('active');
+            percent.classList.add('inactive');
+            anchor.classList.add('active');
+            clearInterval();
+          } else {
+            count = count + 1;
+            percent.textContent = `${count}%`;
+            inner.style.width = `${count}%`;
+            inner.style.height = `${count}%`;
+            externalCircle.style.strokeDashoffset = -count * 3.12;
+          }
+        }, 100);
+      });
+    </script>
+  </body>
+</html>
